@@ -1,10 +1,35 @@
-let http = require('http');
-let server = http.createServer();
+let express = require('express');
+let bodyparser = require('body-parser');
+let session = require('express-session')
 
-let dataBase = [{id:0,todo:'Nourrir le chat',done:false}]
+let app = express()
 
-server.on('request',function(req,res){
-    res.end("Todo List");
-});
+app.set('view engine', 'ejs')
 
-server.listen(3000);
+// Middleware
+
+app.use(express.static('public'));
+
+app.use(bodyparser.urlencoded({ extended: false }));
+
+app.use(bodyparser.json());
+
+// Route
+
+app.get('/', (req, res) => {
+    res.render('Web/index', { test: 'Salut' })
+})
+
+app.post('/', (request, response) => {
+    if (request.body.message === undefined || request.body.message === '') {
+
+        response.redirect('/')
+
+    } else {
+
+    }
+})
+
+app.listen(3000);
+
+// let dataBase = [{id:0,todo:'Nourrir le chat',done:false}]
