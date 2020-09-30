@@ -1,18 +1,26 @@
 <%- include('header') %>
 
 <form action="/" method="post" class="ui form">
-
+ <br>
+ <br>
+ <br>
+ <br>
     <div class="field">
 
         <label for='message'>Message</label>
 
-        <textarea name="message" id="message"></textarea>
+        <input name="message" id="message"></input>
 
     </div>
+
+    <%  for (let i = 0; i<locals.dataBase.length;i++) { %>
+    <li> <%= locals.dataBase[i].todo %> </li>
+    <% } %>
 
     <button type="submit" class="ui blue labeld submit icon button">
 
         <i class="icon edit"></i>Envoyer
+
     </button>
 
 </form>
