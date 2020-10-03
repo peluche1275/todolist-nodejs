@@ -13,9 +13,10 @@
 
     </div>
 
-    <%  for (let i = 0; i<locals.dataBase.length;i++) { %>
-    <li> <%= locals.dataBase[i].todo %> </li>
-    <% } %>
+    <%  for (let i = 0; i<locals.dataBase.length;i++) { 
+        if(locals.dataBase[i].done == false) { %>
+    <li> <%= locals.dataBase[i].todo %> <a href="/?del=<%= locals.dataBase[i].id %>"><i class="icon remove"></i></a> </li> 
+    <% }} %>
 
     <button type="submit" class="ui blue labeld submit icon button">
 
