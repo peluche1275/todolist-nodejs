@@ -10,11 +10,16 @@ let dataBase = [{ id: 0, todo: 'Nourrir le chat', done: false },
 let express = require('express');
 let bodyparser = require('body-parser');
 let url = require('url');
+
 let session = require('express-session')
 
 let app = express()
 
 app.set('view engine', 'ejs')
+
+// DataBase
+
+LauchConnectionToDataBase = require('./connectDataBase.js');
 
 // Middleware
 
@@ -27,9 +32,9 @@ app.use(bodyparser.json());
 // Route
 
 app.get('/', (req, res) => {
-    const queryObject = url.parse(req.url,true).query;
+    const queryObject = url.parse(req.url, true).query;
 
-    if(queryObject.del != undefined){
+    if (queryObject.del != undefined) {
         let dataBaseIndexById = dataBase.findIndex(x => x.id == queryObject.del);
         dataBase[dataBaseIndexById].done = true;
     }
@@ -37,14 +42,16 @@ app.get('/', (req, res) => {
     res.render('web/index', { dataBase })
 })
 
-
-
 app.post('/', (req, res) => {
     dataBase.push({ id: dataBase.length, todo: req.body.message, done: false })
     res.render('web/index', { dataBase })
 })
 
 app.listen(8080);
+
+
+
+
 
 
 
