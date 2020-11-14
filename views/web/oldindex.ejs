@@ -1,0 +1,29 @@
+<%- include('header') %>
+
+<form action="/" method="post" class="ui form">
+ <br>
+ <br>
+ <br>
+ <br>
+    <div class="field">
+
+        <label for='message'>Message</label>
+
+        <input name="message" id="message"></input>
+
+    </div>
+
+    <%  for (let i = 0; i<locals.dataBase.length;i++) { 
+        if(locals.dataBase[i].done == false) { %>
+    <li> <%= locals.dataBase[i].todo %> <a href="/?del=<%= locals.dataBase[i].id %>"><i class="icon remove"></i></a> </li> 
+    <% }} %>
+
+    <button type="submit" class="ui blue labeld submit icon button">
+
+        <i class="icon edit"></i>Envoyer
+
+    </button>
+
+</form>
+
+<%- include('footer') %>

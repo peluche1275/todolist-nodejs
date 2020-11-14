@@ -17,7 +17,19 @@ function LauchConnectionToDataBase() {
 
             await client.connect();
 
-            await listDatabases(client);
+            const database = client.db("todolist");
+            const collection = database.collection("users");
+
+            const query = { user_id: 0 };
+
+            const options = {
+                sort: { rating: -1 },
+                projection: { _id: 0, username: 1},
+              };
+
+            const thename = await collection.findOne(query, options);
+
+            console.log(thename.username);
 
         } catch (e) {
             console.error(e);

@@ -43,7 +43,8 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', (req, res) => {
-    dataBase.push({ id: dataBase.length, todo: req.body.message, done: false })
+    // dataBase.push({ id: dataBase.length, todo: req.body.message, done: false })
+    console.log(req.body)
     res.render('web/index', { dataBase })
 })
 
