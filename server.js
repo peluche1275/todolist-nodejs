@@ -1,5 +1,3 @@
-// DataBase //
-
 let dataBase = [{ id: 0, todo: 'Nourrir le chat', done: false },
 { id: 1, todo: 'Manger une banane', done: false },
 { id: 2, todo: 'Nettoyer la litière', done: false },
@@ -11,6 +9,7 @@ let express = require('express');
 let bodyparser = require('body-parser');
 let url = require('url');
 
+
 let session = require('express-session')
 
 let app = express()
@@ -19,7 +18,11 @@ app.set('view engine', 'ejs')
 
 // DataBase
 
-LauchConnectionToDataBase = require('./connectDataBase.js');
+modelDatabaseImport = require('./connectDataBase.js');
+
+modelDatabase = new modelDatabaseImport();
+
+modelDatabase.run("test")
 
 // Middleware
 

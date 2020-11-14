@@ -1,17 +1,35 @@
-function LauchConnectionToDataBase() {
-    const { MongoClient } = require('mongodb');
+class model {
 
-    async function listDatabases(client) {
-        databasesList = await client.db().admin().listDatabases();
+    constructor() {
 
-        console.log("Databases:");
-        databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-    };
+        this.MongoClient = require("mongodb").MongoClient;
+        this.uri = require('./uri.js');
+        this.client = new this.MongoClient(this.uri);
+    }
 
-    async function main() {
+    async create() { }
 
-        const uri = require('./uri.js');
-        const client = new MongoClient(uri);
+    async delete() { }
+
+    async read() { }
+
+    async test(collection) {
+
+        const query = { user_id: 0 };
+
+        const options = {
+            sort: { rating: -1 },
+            projection: { _id: 0, username: 1 },
+        };
+
+        const thename = await collection.findOne(query, options);
+
+        console.log(thename.username);
+    }
+
+    async run(methodToApply) {
+
+        const client = this.client
 
         try {
 
@@ -20,26 +38,19 @@ function LauchConnectionToDataBase() {
             const database = client.db("todolist");
             const collection = database.collection("users");
 
-            const query = { user_id: 0 };
-
-            const options = {
-                sort: { rating: -1 },
-                projection: { _id: 0, username: 1},
-              };
-
-            const thename = await collection.findOne(query, options);
-
-            console.log(thename.username);
+            eval("this." + methodToApply + "(collection)")
 
         } catch (e) {
+
             console.error(e);
+
         } finally {
+
             await client.close();
+            
         }
+
     }
-
-    main().catch(console.error);
-
 }
 
-module.exports = LauchConnectionToDataBase();
+module.exports = model;
