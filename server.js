@@ -24,8 +24,6 @@ modelDatabase = new modelDatabaseImport();
 
 modelDatabase.run()
 
-
-
 // Middleware
 
 app.use(express.static('public'));
@@ -42,6 +40,11 @@ app.get('/', (req, res) => {
  
 app.post('/', async (req, res) => {
     let data = await modelDatabase.connectionOfTheUser(req.body)
+
+    if(data){
+        console.log("y'a d'la data")
+    }
+
     res.render('web/index', { data } )
 })
 

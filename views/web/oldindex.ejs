@@ -27,3 +27,15 @@
 </form>
 
 <%- include('footer') %>
+
+
+// ..
+
+
+<%  if(locals.data) { %>
+<p> bonjour <%= locals.data.username %> </p>
+<%for (let i = 0; i<locals.dataBase.length;i++) { 
+    if(locals.dataBase[i].done == false) { %>
+<li> <%= locals.dataBase[i].todo %> <a href="/?del=<%= locals.dataBase[i].id %>"><i class="icon remove"></i></a> </li>
+
+<% }}} %>
