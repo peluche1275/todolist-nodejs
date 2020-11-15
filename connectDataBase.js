@@ -7,48 +7,55 @@ class model {
         this.client = new this.MongoClient(this.uri);
     }
 
+    async run() {
+        const client = this.client
+        await client.connect();
+
+        console.log("Connexion réussi !")
+    }
+
     async create() { }
 
     async delete() { }
 
     async read() { }
 
-    async test(collection) {
+    async connectionOfTheUser(infosEnteredByUser) {
 
-        const query = { user_id: 0 };
 
-        const options = {
-            sort: { rating: -1 },
-            projection: { _id: 0, username: 1 },
-        };
-
-        const thename = await collection.findOne(query, options);
-
-        console.log(thename.username);
-    }
-
-    async run(methodToApply) {
-
-        const client = this.client
+        
 
         try {
 
-            await client.connect();
+            const client = this.client
 
             const database = client.db("todolist");
             const collection = database.collection("users");
 
-            eval("this." + methodToApply + "(collection)")
+            const query = { username: infosEnteredByUser.username };
+
+
+            const options = {
+                sort: { rating: -1 },
+                projection: { _id: 0, username: 1, psswrd: 1 },
+            };
+
+            const userInfoInDataBase = await collection.findOne(query, options);
+
+            if(infosEnteredByUser.psswrd == userInfoInDataBase.psswrd) {
+                console.log("ça correspond !")
+                return userInfoInDataBase
+            } else {
+                console.log("ça correspond pas !!!")
+            }
+
+            
 
         } catch (e) {
 
             console.error(e);
 
-        } finally {
-
-            await client.close();
-            
-        }
+        } 
 
     }
 }
