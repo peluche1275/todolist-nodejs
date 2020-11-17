@@ -1,7 +1,3 @@
-// let dataBase = [{ id: 0, todo: 'Nourrir le chat', done: false },
-// { id: 1, todo: 'Manger une banane', done: false },
-// { id: 2, todo: 'Nettoyer la litière', done: false },
-// { id: 3, todo: 'Faire à manger', done: false }]
 
 // Module
 
@@ -43,6 +39,7 @@ app.post('/', async (req, res) => {
 
     if(data){
         console.log("y'a d'la data")
+        console.log(data)
     }
 
     res.render('web/index', { data } )

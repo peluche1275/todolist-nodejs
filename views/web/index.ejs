@@ -29,8 +29,14 @@
 
 <%  if(locals.data) { %>
     
-<p> bonjour <%= locals.data.username %> </p>
+
+<%  for (let i = 0; i<locals.data.length;i++) { 
+    if(locals.data[i].done == false) { %>
+<li> <%= locals.data[i].text %> <a href="/?del=<%= locals.data[i].todo_id %>"><i class="icon remove"></i></a> </li> 
+<% }} %>
 
 <% } %>
+
+
 
 <%- include('footer') %>
