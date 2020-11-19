@@ -3,9 +3,22 @@
 <br>
 <br>
 <br>
-<form action="/" method="post" class="ui form">
 
-    <h1>Connexion</h1>
+
+<%  if(locals.data) { %>
+
+<h1> Voici votre todolist !</h1>
+
+<%  for (let i = 0; i<locals.data.length;i++) { 
+    if(locals.data[i].done == false) { %>
+<li> <%= locals.data[i].text %> <a href="/?del=<%= locals.data[i].todo_id %>"><i class="icon remove"></i></a> </li>
+<% }} %>
+
+<% } else {%>
+
+<h1>Connexion</h1>
+
+<form action="/" method="post" class="ui form">
 
     <div class="field">
 
@@ -26,17 +39,6 @@
     </button>
 
 </form>
-
-<%  if(locals.data) { %>
-    
-
-<%  for (let i = 0; i<locals.data.length;i++) { 
-    if(locals.data[i].done == false) { %>
-<li> <%= locals.data[i].text %> <a href="/?del=<%= locals.data[i].todo_id %>"><i class="icon remove"></i></a> </li> 
-<% }} %>
-
-<% } %>
-
-
+<% }  %>
 
 <%- include('footer') %>

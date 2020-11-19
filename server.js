@@ -1,12 +1,10 @@
-
 // Module
 
 let express = require('express');
 let bodyparser = require('body-parser');
 let url = require('url');
-
-
 let session = require('express-session')
+let validator = require('express-validator')
 
 let app = express()
 
@@ -28,33 +26,28 @@ app.use(bodyparser.urlencoded({ extended: false }));
 
 app.use(bodyparser.json());
 
+// app.use(validator());
+
+app.use(session({secret:"nathan",saveUninitialized:false,resave:false}));
+
 // Route
 
 app.get('/', (req, res) => {
-    res.render('web/index')
+    let data = req.session.data
+    res.render('web/index', { data })
 })
  
 app.post('/', async (req, res) => {
-    let data = await modelDatabase.connectionOfTheUser(req.body)
-
-    if(data){
-        console.log("y'a d'la data")
-        console.log(data)
-    }
-
+    req.session.data = await modelDatabase.connectionOfTheUser(req.body)
+    let data = req.session.data
+    
+    
     res.render('web/index', { data } )
 })
 
 app.listen(8080);
 
 
-
-// const queryObject = url.parse(req.url, true).query;
-
-//     if (queryObject.del != undefined) {
-//         let dataBaseIndexById = dataBase.findIndex(x => x.id == queryObject.del);
-//         dataBase[dataBaseIndexById].done = true;
-//     }
 
 
 

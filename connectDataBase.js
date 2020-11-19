@@ -20,6 +20,25 @@ class model {
 
     async read() { }
 
+    async searchUserTodoList(userInfoInDataBase,database) {
+
+        const collectionTodo = database.collection("todolists");
+
+        let userTodolistsInDataBase = await collectionTodo.find({ user_id: userInfoInDataBase.user_id });
+
+        let dataToSend = []
+
+        await userTodolistsInDataBase.forEach(function (myDoc) {
+
+            dataToSend.push({ todo_id: myDoc.todo_id, text: myDoc.text, done: myDoc.done })
+
+            console.log(dataToSend)
+
+        });
+
+        return dataToSend
+    }
+
     async connectionOfTheUser(infosEnteredByUser) {
 
         try {
@@ -28,7 +47,7 @@ class model {
 
             const database = client.db("todolist");
             const collectionUser = database.collection("users");
-            const collectionTodo = database.collection("todolists");
+            
 
             const query = { username: infosEnteredByUser.username };
 
@@ -42,23 +61,9 @@ class model {
 
 
             if (infosEnteredByUser.psswrd == userInfoInDataBase.psswrd) {
-                console.log("ça correspond !")
 
-                let userTodolistsInDataBase = await collectionTodo.find({ user_id: userInfoInDataBase.user_id });
+                return this.searchUserTodoList(userInfoInDataBase,database)
 
-                let dataToSend = []
-
-                await userTodolistsInDataBase.forEach(function (myDoc) {
-
-                    dataToSend.push({ todo_id: myDoc.todo_id, text: myDoc.text, done: myDoc.done })
-
-                    console.log(dataToSend)
-
-                });
-
-                return dataToSend
-            } else {
-                console.log("ça correspond pas !!!")
             }
 
         } catch (e) {
