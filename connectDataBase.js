@@ -16,12 +16,27 @@ class model {
 
     async create() { }
 
-    async delete() { }
+    async delete(idOfTheTodo) {
+        const client = this.client;
+        const database = client.db("todolist");
+        const collectionTodo = database.collection("todolists");
+
+        const updateDoc = {
+            $set: {
+              done:true,
+            },
+          };
+        
+        await collectionTodo.updateOne({ user_id: 0,todo_id:parseInt(idOfTheTodo)},  updateDoc, { upsert: true });
+        let docToFind = await collectionTodo.findOne({ user_id: 0,todo_id:parseInt(idOfTheTodo) });
+
+     }
 
     async read() { }
 
-    async searchUserTodoList(userInfoInDataBase,database) {
-
+    async searchUserTodoList(userInfoInDataBase) {
+        const client = this.client;
+        const database = client.db("todolist");
         const collectionTodo = database.collection("todolists");
 
         let userTodolistsInDataBase = await collectionTodo.find({ user_id: userInfoInDataBase.user_id });
@@ -30,13 +45,13 @@ class model {
 
         await userTodolistsInDataBase.forEach(function (myDoc) {
 
-            dataToSend.push({ todo_id: myDoc.todo_id, text: myDoc.text, done: myDoc.done })
-
-            console.log(dataToSend)
+            
+            dataToSend.push({ todo_id: myDoc.todo_id, text: myDoc.text, done: myDoc.done });
+            
 
         });
 
-        return dataToSend
+        return [{username:userInfoInDataBase.username,user_id:userInfoInDataBase.user_id},dataToSend];
     }
 
     async connectionOfTheUser(infosEnteredByUser) {
@@ -62,7 +77,8 @@ class model {
 
             if (infosEnteredByUser.psswrd == userInfoInDataBase.psswrd) {
 
-                return this.searchUserTodoList(userInfoInDataBase,database)
+                return this.searchUserTodoList(userInfoInDataBase)
+                
 
             }
 
