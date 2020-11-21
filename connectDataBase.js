@@ -14,9 +14,17 @@ class model {
         console.log("Connexion à la database réussie !")
     }
 
-    async create() { }
+    async create(todo,userInfo) {
+        const client = this.client;
+        const database = client.db("todolist");
+        const collectionTodo = database.collection("todolists");
 
-    async delete(idOfTheTodo) {
+        const numberOfTodo = await collectionTodo.countDocuments({user_id:userInfo.user_id});
+        const documentToInsert = { user_id:userInfo.user_id, todo_id:numberOfTodo,text:todo,done:false }
+        await collectionTodo.insertOne(documentToInsert);
+     }
+
+    async delete(idOfTheTodo,userInfo) {
         const client = this.client;
         const database = client.db("todolist");
         const collectionTodo = database.collection("todolists");
@@ -27,12 +35,10 @@ class model {
             },
           };
         
-        await collectionTodo.updateOne({ user_id: 0,todo_id:parseInt(idOfTheTodo)},  updateDoc, { upsert: true });
-        let docToFind = await collectionTodo.findOne({ user_id: 0,todo_id:parseInt(idOfTheTodo) });
+        await collectionTodo.updateOne({ user_id: userInfo.user_id,todo_id:parseInt(idOfTheTodo)},  updateDoc, { upsert: true });
 
      }
 
-    async read() { }
 
     async searchUserTodoList(userInfoInDataBase) {
         const client = this.client;

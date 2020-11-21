@@ -14,6 +14,24 @@
 <li> <%= locals.data[i].text %> <a href="/?del=<%= locals.data[i].todo_id %>"><i class="icon remove"></i></a> </li>
 <% }} %>
 
+<form action="/" method="get" class="ui form">
+
+<div class="field">
+
+    <label for='message'>Ajouter quelquechose à faire</label>
+
+    <input type="text" name="add" id="add"></input>
+
+</div>
+
+<button type="submit" class="ui blue labeld submit icon button">
+
+    Envoyer
+
+</button>
+
+</form>
+
 <a href="/disconnect"><button class="ui blue labeld submit icon button">
 
     Déconnexion
