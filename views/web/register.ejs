@@ -1,0 +1,30 @@
+<%- include('header') %>
+ <br>
+ <br>
+ <br>
+ 
+ <form action="/inscription" method="post" class="ui form">
+
+    <div class="field">
+
+        <label for='message'>Username</label>
+
+        <input type="text" name="username" id="username"></input>
+
+        <label for='message'>Password</label>
+
+        <input type="password" name="psswrd" id="psswrd"></input>
+
+        <label for='message'>Password</label>
+
+        <input type="password" name="psswrdVerify" id="psswrdVerify"></input>
+
+    </div>
+
+    <button type="submit" class="ui blue labeld submit icon button">
+
+        Envoyer
+
+    </button>
+
+<%- include('footer') %>

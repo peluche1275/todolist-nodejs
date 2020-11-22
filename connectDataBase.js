@@ -51,9 +51,7 @@ class model {
 
         await userTodolistsInDataBase.forEach(function (myDoc) {
 
-
             dataToSend.push({ todo_id: myDoc.todo_id, text: myDoc.text, done: myDoc.done });
-
 
         });
 
