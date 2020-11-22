@@ -1,7 +1,7 @@
 class model {
 
     constructor(s3) {
-
+        console.log(s3)
         this.MongoClient = require("mongodb").MongoClient;
         this.client = new this.MongoClient(s3);
     }
