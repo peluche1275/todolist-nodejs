@@ -1,10 +1,9 @@
 class model {
 
-    constructor() {
+    constructor(s3) {
 
         this.MongoClient = require("mongodb").MongoClient;
-        this.uri = require('./uri.js');
-        this.client = new this.MongoClient(this.uri);
+        this.client = new this.MongoClient(s3);
     }
 
     async run() {
@@ -14,30 +13,30 @@ class model {
         console.log("Connexion à la database réussie !")
     }
 
-    async create(todo,userInfo) {
+    async create(todo, userInfo) {
         const client = this.client;
         const database = client.db("todolist");
         const collectionTodo = database.collection("todolists");
 
-        const numberOfTodo = await collectionTodo.countDocuments({user_id:userInfo.user_id});
-        const documentToInsert = { user_id:userInfo.user_id, todo_id:numberOfTodo,text:todo,done:false }
+        const numberOfTodo = await collectionTodo.countDocuments({ user_id: userInfo.user_id });
+        const documentToInsert = { user_id: userInfo.user_id, todo_id: numberOfTodo, text: todo, done: false }
         await collectionTodo.insertOne(documentToInsert);
-     }
+    }
 
-    async delete(idOfTheTodo,userInfo) {
+    async delete(idOfTheTodo, userInfo) {
         const client = this.client;
         const database = client.db("todolist");
         const collectionTodo = database.collection("todolists");
 
         const updateDoc = {
             $set: {
-              done:true,
+                done: true,
             },
-          };
-        
-        await collectionTodo.updateOne({ user_id: userInfo.user_id,todo_id:parseInt(idOfTheTodo)},  updateDoc, { upsert: true });
+        };
 
-     }
+        await collectionTodo.updateOne({ user_id: userInfo.user_id, todo_id: parseInt(idOfTheTodo) }, updateDoc, { upsert: true });
+
+    }
 
 
     async searchUserTodoList(userInfoInDataBase) {
@@ -51,13 +50,13 @@ class model {
 
         await userTodolistsInDataBase.forEach(function (myDoc) {
 
-            
+
             dataToSend.push({ todo_id: myDoc.todo_id, text: myDoc.text, done: myDoc.done });
-            
+
 
         });
 
-        return [{username:userInfoInDataBase.username,user_id:userInfoInDataBase.user_id},dataToSend];
+        return [{ username: userInfoInDataBase.username, user_id: userInfoInDataBase.user_id }, dataToSend];
     }
 
     async connectionOfTheUser(infosEnteredByUser) {
@@ -68,7 +67,7 @@ class model {
 
             const database = client.db("todolist");
             const collectionUser = database.collection("users");
-            
+
 
             const query = { username: infosEnteredByUser.username };
 
@@ -84,7 +83,7 @@ class model {
             if (infosEnteredByUser.psswrd == userInfoInDataBase.psswrd) {
 
                 return this.searchUserTodoList(userInfoInDataBase)
-                
+
 
             }
 

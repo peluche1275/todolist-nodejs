@@ -1,9 +1,5 @@
 <%- include('header') %>
 <br>
-<br>
-<br>
-<br>
-
 
 <%  if(locals.data) { %>
 
@@ -16,27 +12,27 @@
 
 <form action="/" method="get" class="ui form">
 
-<div class="field">
+    <div class="field">
 
-    <label for='message'>Ajouter quelquechose à faire</label>
+        <label for='message'>Ajouter quelquechose à faire</label>
 
-    <input type="text" name="add" id="add"></input>
+        <input type="text" name="add" id="add"></input>
 
-</div>
+    </div>
 
-<button type="submit" class="ui blue labeld submit icon button">
+    <button type="submit" class="ui blue labeld submit icon button">
 
-    Envoyer
+        Envoyer
 
-</button>
+    </button>
 
 </form>
 
 <a href="/disconnect"><button class="ui blue labeld submit icon button">
 
-    Déconnexion
+        Déconnexion
 
-</button></a>
+    </button></a>
 
 <% } else {%>
 

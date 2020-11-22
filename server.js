@@ -1,21 +1,25 @@
 // Module
-
-let express = require('express');
+let aws = require('aws-sdk');
 let bodyparser = require('body-parser');
 let url = require('url');
+let express = require('express');
 let session = require('express-session')
-
 let app = express()
 
 app.set('view engine', 'ejs')
 
 // DataBase
 
+let s3 = new aws.S3({
+    accessKeyId: process.env.S3_KEY,
+    secretAccessKey: process.env.S3_SECRET
+});
+
 modelDatabaseImport = require('./connectDataBase.js');
 
 modelDatabase = new modelDatabaseImport();
 
-modelDatabase.run()
+modelDatabase.run(s3)
 
 // Middleware
 
@@ -31,7 +35,6 @@ app.use(session({ secret: "nathan", saveUninitialized: false, resave: false }));
 
 app.get('/', async (req, res) => {
 
-
     const queryObject = url.parse(req.url, true).query;
 
     let data = undefined
@@ -41,13 +44,9 @@ app.get('/', async (req, res) => {
 
         if (queryObject.del != undefined) {
             await modelDatabase.delete(queryObject.del, req.session.infoFromDB[0])
-
-        }
-
-        if (queryObject.add != undefined) {
+        } else if (queryObject.add != undefined) {
             await modelDatabase.create(queryObject.add, req.session.infoFromDB[0])
         }
-
 
         req.session.infoFromDB = await modelDatabase.searchUserTodoList(req.session.infoFromDB[0])
         data = req.session.infoFromDB[1]
@@ -74,7 +73,6 @@ app.get('/disconnect', (req, res) => {
     })
     res.render('web/index')
 });
-
 
 app.listen(8080);
 
