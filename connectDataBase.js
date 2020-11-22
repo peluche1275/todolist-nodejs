@@ -1,11 +1,7 @@
 class model {
 
-<<<<<<< HEAD
     constructor(s3) {
         console.log(s3)
-=======
-    constructor(uri) {
->>>>>>> 2641692bda911bd2a13da85e09678af7bd6a2b07
         this.MongoClient = require("mongodb").MongoClient;
         this.client = new this.MongoClient(uri);
     }
