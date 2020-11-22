@@ -1,9 +1,8 @@
 class model {
 
-    constructor(s3) {
-
+    constructor(uri) {
         this.MongoClient = require("mongodb").MongoClient;
-        this.client = new this.MongoClient(s3);
+        this.client = new this.MongoClient(uri);
     }
 
     async run() {

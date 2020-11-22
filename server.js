@@ -11,15 +11,16 @@ app.set('view engine', 'ejs')
 // DataBase
 
 let s3 = new aws.S3({
-    accessKeyId: process.env.S3_KEY,
+    accessKeyId: process.env.S3_KEY ,
     secretAccessKey: process.env.S3_SECRET
 });
+
 
 modelDatabaseImport = require('./connectDataBase.js');
 
 modelDatabase = new modelDatabaseImport();
 
-modelDatabase.run(s3)
+modelDatabase.run(s3.config.accessKeyId)
 
 // Middleware
 
