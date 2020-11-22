@@ -1,5 +1,4 @@
 // Module
-let aws = require('aws-sdk');
 let bodyparser = require('body-parser');
 let url = require('url');
 let express = require('express');
@@ -10,17 +9,11 @@ app.set('view engine', 'ejs')
 
 // DataBase
 
-let s3 = new aws.S3({
-    accessKeyId: process.env.S3_KEY ,
-    secretAccessKey: process.env.S3_SECRET
-});
-
-
 modelDatabaseImport = require('./connectDataBase.js');
 
 modelDatabase = new modelDatabaseImport();
 
-modelDatabase.run(s3.config.accessKeyId)
+modelDatabase.run()
 
 // Middleware
 

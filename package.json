@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/peluche1275/todolist-nodejs.git"
+    "url": "git+https://github.com/peluche1275/todolist-private.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/peluche1275/todolist-nodejs/issues"
+    "url": "https://github.com/peluche1275/todolist-private/issues"
   },
-  "homepage": "https://github.com/peluche1275/todolist-nodejs#readme",
+  "homepage": "https://github.com/peluche1275/todolist-private#readme",
   "dependencies": {
     "aws-sdk": "^2.797.0",
     "body-parser": "^1.19.0",
