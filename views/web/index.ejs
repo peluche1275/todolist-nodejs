@@ -3,7 +3,7 @@
 
 <%  if(locals.data) { %>
 
-<h1> Voici votre todolist !</h1>
+<h2> Voici votre todolist !</h2>
 
 <%  for (let i = 0; i<locals.data.length;i++) { 
     if(locals.data[i].done == false) { %>
@@ -36,7 +36,7 @@
 
 <% } else {%>
 
-<h1>Connexion</h1>
+<h2>Connexion</h2>
 
 <form action="/" method="post" class="ui form">
 

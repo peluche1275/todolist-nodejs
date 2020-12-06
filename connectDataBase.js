@@ -4,7 +4,7 @@ class model {
 
         this.MongoClient = require("mongodb").MongoClient;
         this.uri = require("./uri")
-        this.client = new this.MongoClient(this.uri);
+        this.client = new this.MongoClient(this.uri,{ useUnifiedTopology: true });
     }
 
     async run() {
@@ -29,9 +29,16 @@ class model {
         const database = client.db("todolist");
         const collectionUsers = database.collection("users");
 
-        const numberOfUsers = await collectionUsers.count();
-        const documentToInsert = { user_id: numberOfUsers, username: username, psswrd: cryptedPassword }
-        await collectionUsers.insertOne(documentToInsert);
+        if (await collectionUsers.countDocuments({ username: username })) {
+            return false;
+        } else {
+            const numberOfUsers = await collectionUsers.count();
+            const documentToInsert = { user_id: numberOfUsers, username: username, psswrd: cryptedPassword }
+            await collectionUsers.insertOne(documentToInsert);
+            return true;
+        }
+
+
     }
 
     async delete(idOfTheTodo, userInfo) {
@@ -48,7 +55,6 @@ class model {
         await collectionTodo.updateOne({ user_id: userInfo.user_id, todo_id: parseInt(idOfTheTodo) }, updateDoc, { upsert: true });
 
     }
-
 
     async searchUserTodoList(userInfoInDataBase) {
         const client = this.client;
@@ -71,7 +77,7 @@ class model {
     async connectionOfTheUser(infosEnteredByUser) {
 
         try {
-            
+
             let CryptoJS = require("crypto-js");
             const client = this.client;
 
