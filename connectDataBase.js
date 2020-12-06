@@ -24,6 +24,16 @@ class model {
         await collectionTodo.insertOne(documentToInsert);
     }
 
+    async registration(username, cryptedPassword) {
+        const client = this.client;
+        const database = client.db("todolist");
+        const collectionUsers = database.collection("users");
+
+        const numberOfUsers = await collectionUsers.count();
+        const documentToInsert = { user_id: numberOfUsers, username: username, psswrd: cryptedPassword }
+        await collectionUsers.insertOne(documentToInsert);
+    }
+
     async delete(idOfTheTodo, userInfo) {
         const client = this.client;
         const database = client.db("todolist");
@@ -61,7 +71,8 @@ class model {
     async connectionOfTheUser(infosEnteredByUser) {
 
         try {
-
+            
+            let CryptoJS = require("crypto-js");
             const client = this.client;
 
             const database = client.db("todolist");
@@ -78,11 +89,13 @@ class model {
 
             const userInfoInDataBase = await collectionUser.findOne(query, options);
 
+            let bytes = CryptoJS.AES.decrypt(userInfoInDataBase.psswrd, 'todolist');
 
-            if (infosEnteredByUser.psswrd == userInfoInDataBase.psswrd) {
+            let originalText = bytes.toString(CryptoJS.enc.Utf8);
+
+            if (infosEnteredByUser.psswrd == originalText) {
 
                 return this.searchUserTodoList(userInfoInDataBase)
-
 
             }
 

@@ -83,9 +83,14 @@ app.get('/inscription', (req, res) => {
 
 app.post('/inscription', async (req, res) => {
 
-    let ciphertext = CryptoJS.AES.encrypt(req.body.psswrd, 'todolist').toString();
+    if (req.body.psswrd == req.body.psswrdVerify) {
+        let username = req.body.username;
+        let cryptedPassword = CryptoJS.AES.encrypt(req.body.psswrd, 'todolist').toString();
+        await modelDatabase.registration(username,cryptedPassword)
+    }
 
     res.render('web/register')
+
 });
 
 app.listen(process.env.PORT || 8080);
