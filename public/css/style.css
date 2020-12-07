@@ -1,0 +1,60 @@
+/* Général */
+
+body {
+    background-color: #27ae60;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+/* Formulaire */
+
+li{
+    list-style-type: none;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+}
+
+input {
+    width: 200px;
+    border: none;
+    background-color: #78e08f;
+}
+
+button {
+    display: block;
+    width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    border: none;
+    background-color: #2ecc71;
+    color: white;
+    border-radius: 5%;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+/* Titres */
+
+h1 {
+    font-family: 'Kaushan Script', cursive;
+    
+}
+
+/* Pied de page  */
+
+footer{
+    margin-top: 20px;
+    font-size: 30px;
+}

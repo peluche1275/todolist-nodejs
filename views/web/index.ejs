@@ -1,13 +1,12 @@
 <%- include('header') %>
-<br>
 
 <%  if(locals.data) { %>
 
-<h2> Voici votre todolist !</h2>
+<h2> La todolist de <%= locals.userInfo.username %> !</h2>
 
 <%  for (let i = 0; i<locals.data.length;i++) { 
     if(locals.data[i].done == false) { %>
-<li> <%= locals.data[i].text %> <a href="/?del=<%= locals.data[i].todo_id %>"><i class="icon remove"></i></a> </li>
+<li> <%= locals.data[i].text %> <a href="/?del=<%= locals.data[i].todo_id %>"><i class="fas fa-trash-alt"></i></a> </li>
 <% }} %>
 
 <form action="/" method="get" class="ui form">
@@ -40,17 +39,15 @@
 
 <form action="/" method="post" class="ui form">
 
-    <div class="field">
 
-        <label for='message'>Username</label>
+        <label for='message'>Nom d'utilisateur</label>
 
         <input type="text" name="username" id="username"></input>
 
-        <label for='message'>Password</label>
+        <label for='message'>Mot de passe</label>
 
         <input type="password" name="psswrd" id="psswrd"></input>
 
-    </div>
 
     <button type="submit" class="ui blue labeld submit icon button">
 
@@ -59,6 +56,9 @@
     </button>
 
 </form>
+
+<a href="/inscription" class="header item">Inscription</a>
+
 <% }  %>
 
 <%- include('footer') %>
