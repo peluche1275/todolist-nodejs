@@ -1,17 +1,20 @@
 class model {
 
     constructor() {
-
+        this.CryptoJS = require("crypto-js");
         this.MongoClient = require("mongodb").MongoClient;
         this.uri = require("./uri")
         this.client = new this.MongoClient(this.uri,{ useUnifiedTopology: true });
     }
 
     async run() {
-        const client = this.client;
-        await client.connect();
+        await this.client.connect();
+    }
 
-        console.log("Connexion à la database réussie !")
+    connectionToCollection(nameOfTheCollection){
+        const client = this.client;
+        const database = client.db("todolist");
+        return database.collection(nameOfTheCollection);
     }
 
     async create(todo, userInfo) {
@@ -25,26 +28,23 @@ class model {
     }
 
     async registration(username, cryptedPassword) {
-        const client = this.client;
-        const database = client.db("todolist");
-        const collectionUsers = database.collection("users");
-
+        
+        console.log("Je suis invoqué")
+        const collectionUsers = this.connectionToCollection("users")
         if (await collectionUsers.countDocuments({ username: username })) {
             return false;
         } else {
-            const numberOfUsers = await collectionUsers.count();
+            const numberOfUsers = await collectionUsers.countDocuments();
             const documentToInsert = { user_id: numberOfUsers, username: username, psswrd: cryptedPassword }
             await collectionUsers.insertOne(documentToInsert);
             return true;
         }
 
-
     }
 
     async delete(idOfTheTodo, userInfo) {
-        const client = this.client;
-        const database = client.db("todolist");
-        const collectionTodo = database.collection("todolists");
+
+        const collectionTodo = this.connectionToCollection("todolists")
 
         const updateDoc = {
             $set: {
@@ -57,9 +57,8 @@ class model {
     }
 
     async searchUserTodoList(userInfoInDataBase) {
-        const client = this.client;
-        const database = client.db("todolist");
-        const collectionTodo = database.collection("todolists");
+
+        const collectionTodo = this.connectionToCollection("todolists")
 
         let userTodolistsInDataBase = await collectionTodo.find({ user_id: userInfoInDataBase.user_id });
 
@@ -78,31 +77,27 @@ class model {
 
         try {
 
-            let CryptoJS = require("crypto-js");
-            const client = this.client;
-
-            const database = client.db("todolist");
-            const collectionUser = database.collection("users");
-
+            const collectionUsers = this.connectionToCollection("users")
 
             const query = { username: infosEnteredByUser.username };
-
 
             const options = {
                 sort: { rating: -1 },
                 projection: { _id: 0, username: 1, psswrd: 1, user_id: 1 },
             };
 
-            const userInfoInDataBase = await collectionUser.findOne(query, options);
+            const userInfoInDataBase = await collectionUsers.findOne(query, options);
 
-            let bytes = CryptoJS.AES.decrypt(userInfoInDataBase.psswrd, 'todolist');
+            let bytes = this.CryptoJS.AES.decrypt(userInfoInDataBase.psswrd, 'todolist');
 
-            let originalText = bytes.toString(CryptoJS.enc.Utf8);
+            let originalText = bytes.toString(this.CryptoJS.enc.Utf8);
 
             if (infosEnteredByUser.psswrd == originalText) {
 
                 return this.searchUserTodoList(userInfoInDataBase)
 
+            } else {
+                return false
             }
 
         } catch (e) {

@@ -55,16 +55,26 @@ app.post('/', async (req, res) => {
 
     req.session.infoFromDB = await modelDatabase.connectionOfTheUser(req.body)
 
-    let userInfo = req.session.infoFromDB[0]
-    let data = req.session.infoFromDB[1]
+    if(req.session.infoFromDB) {
+        let userInfo = req.session.infoFromDB[0]
+        let data = req.session.infoFromDB[1]
+    
+        res.render('web/index', { userInfo, data })
+    } else {
+        let data = undefined
+        let userInfo = undefined
+        let error = "Mots de passe ou nom d'utilisateur incorrect !"
+        res.render('web/index', { userInfo, data,error })
+    }
 
-    res.render('web/index', { userInfo, data })
 });
 
 app.get('/disconnect', (req, res) => {
 
     req.session.destroy(function (err) {
-        console.log(err)
+        if(err) {
+            console.log(err)
+        }
     })
     res.render('web/index');
 });
@@ -76,7 +86,8 @@ app.get('/inscription', (req, res) => {
         let data = req.session.infoFromDB[1]
         res.render('web/index', { userInfo, data })
     } else {
-        res.render('web/register');
+        let error = undefined
+        res.render('web/register',{ error } );
     }
 
 });
@@ -86,14 +97,15 @@ app.post('/inscription', async (req, res) => {
     if (req.body.psswrd == req.body.psswrdVerify) {
         let username = req.body.username;
         let cryptedPassword = CryptoJS.AES.encrypt(req.body.psswrd, 'todolist').toString();
-        await modelDatabase.registration(username, cryptedPassword);
         if (await modelDatabase.registration(username, cryptedPassword)) {
             res.render('web/index');
         } else {
-            res.render('web/register');
+            let error = "Ce pseudonyme existe déjà !"
+            res.render('web/register',{ error });
         }
     } else {
-        res.render('web/register');
+        let error = "Les mots de passes sont différents !"
+        res.render('web/register',{ error });
     }
 });
 
