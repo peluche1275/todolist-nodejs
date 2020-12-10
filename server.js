@@ -3,10 +3,10 @@ let CryptoJS = require("crypto-js");
 let bodyparser = require('body-parser');
 let url = require('url');
 let express = require('express');
-let session = require('express-session')
-let app = express()
+let session = require('express-session');
+let app = express();
 
-app.set('view engine', 'ejs')
+app.set('view engine', 'ejs');
 
 // DataBase
 
@@ -14,7 +14,7 @@ modelDatabaseImport = require('./connectDataBase.js');
 
 modelDatabase = new modelDatabaseImport();
 
-modelDatabase.run()
+modelDatabase.run();
 
 // Middleware
 
@@ -32,8 +32,8 @@ app.get('/', async (req, res) => {
 
     const queryObject = url.parse(req.url, true).query;
 
-    let data = undefined
-    let userInfo = undefined
+    let data = undefined;
+    let userInfo = undefined;
 
     if (req.session.infoFromDB) {
 
@@ -48,7 +48,7 @@ app.get('/', async (req, res) => {
         userInfo = req.session.infoFromDB[0]
     }
 
-    res.render('web/index', { data, userInfo })
+    res.render('web/index', { data, userInfo });
 });
 
 app.post('/', async (req, res) => {
@@ -56,15 +56,15 @@ app.post('/', async (req, res) => {
     req.session.infoFromDB = await modelDatabase.connectionOfTheUser(req.body)
 
     if(req.session.infoFromDB) {
-        let userInfo = req.session.infoFromDB[0]
-        let data = req.session.infoFromDB[1]
+        let userInfo = req.session.infoFromDB[0];
+        let data = req.session.infoFromDB[1];
     
         res.render('web/index', { userInfo, data })
     } else {
-        let data = undefined
-        let userInfo = undefined
-        let error = "Mots de passe ou nom d'utilisateur incorrect !"
-        res.render('web/index', { userInfo, data,error })
+        let data = undefined;
+        let userInfo = undefined;
+        let error = "Mots de passe ou nom d'utilisateur incorrect !";
+        res.render('web/index', { userInfo, data,error });
     }
 
 });
@@ -73,7 +73,7 @@ app.get('/disconnect', (req, res) => {
 
     req.session.destroy(function (err) {
         if(err) {
-            console.log(err)
+            console.log(err);
         }
     })
     res.render('web/index');
@@ -86,7 +86,7 @@ app.get('/inscription', (req, res) => {
         let data = req.session.infoFromDB[1]
         res.render('web/index', { userInfo, data })
     } else {
-        let error = undefined
+        let error = undefined;
         res.render('web/register',{ error } );
     }
 
@@ -100,11 +100,11 @@ app.post('/inscription', async (req, res) => {
         if (await modelDatabase.registration(username, cryptedPassword)) {
             res.render('web/index');
         } else {
-            let error = "Ce pseudonyme existe déjà !"
+            let error = "Ce pseudonyme existe déjà !";
             res.render('web/register',{ error });
         }
     } else {
-        let error = "Les mots de passes sont différents !"
+        let error = "Les mots de passe sont différents !";
         res.render('web/register',{ error });
     }
 });

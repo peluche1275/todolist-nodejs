@@ -18,10 +18,7 @@ class model {
     }
 
     async create(todo, userInfo) {
-        const client = this.client;
-        const database = client.db("todolist");
-        const collectionTodo = database.collection("todolists");
-
+        const collectionTodo = this.connectionToCollection("todolists")
         const numberOfTodo = await collectionTodo.countDocuments({ user_id: userInfo.user_id });
         const documentToInsert = { user_id: userInfo.user_id, todo_id: numberOfTodo, text: todo, done: false }
         await collectionTodo.insertOne(documentToInsert);
@@ -29,7 +26,6 @@ class model {
 
     async registration(username, cryptedPassword) {
         
-        console.log("Je suis invoqué")
         const collectionUsers = this.connectionToCollection("users")
         if (await collectionUsers.countDocuments({ username: username })) {
             return false;
@@ -45,7 +41,6 @@ class model {
     async delete(idOfTheTodo, userInfo) {
 
         const collectionTodo = this.connectionToCollection("todolists")
-
         const updateDoc = {
             $set: {
                 done: true,
@@ -60,7 +55,7 @@ class model {
 
         const collectionTodo = this.connectionToCollection("todolists")
 
-        let userTodolistsInDataBase = await collectionTodo.find({ user_id: userInfoInDataBase.user_id });
+        let userTodolistsInDataBase = await collectionTodo.find({ user_id: userInfoInDataBase.user_id,done:false });
 
         let dataToSend = []
 
@@ -69,8 +64,8 @@ class model {
             dataToSend.push({ todo_id: myDoc.todo_id, text: myDoc.text, done: myDoc.done });
 
         });
-
         return [{ username: userInfoInDataBase.username, user_id: userInfoInDataBase.user_id }, dataToSend];
+        
     }
 
     async connectionOfTheUser(infosEnteredByUser) {
